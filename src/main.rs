@@ -1,15 +1,11 @@
+use nerd::vector::Vec2;
+
 extern crate nerd;
 
-use nerd::complex::*;
-
 fn main() {
-    let c = Complex {
-        real: 0.2,
-        imag: 0.1,
-    };
 
-    // c.println();
+    let v = Vec2::new(3., 4.);
+    let w = Vec2::new(2., 3.);
 
-    let mut a = 0;
-    println!("{}", nerd::mandelbrot::is_part_of(c, 4.0, 100, &mut a));
+    println!("{}", -v + w + 5.);
 }
