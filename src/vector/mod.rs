@@ -8,6 +8,8 @@ pub struct Vec2 {
 
 impl Vec2 {
     pub const ONE: Vec2 = Vec2::new(1., 1.);
+    pub const UP: Vec2 = Vec2::new(1., 0.);
+    pub const DOWN: Vec2 = Vec2::new(-1., 0.);
 
     pub const fn new(x: f64, y: f64) -> Vec2 {
         Vec2 { x, y }
@@ -31,8 +33,7 @@ impl Vec2 {
     }
 
     pub fn dot(&self, rhs: Vec2) -> f64 {
-        // TODO
-        0.
+        self.x * rhs.x + self.y * rhs.y
     }
 }
 
@@ -106,7 +107,7 @@ impl ops::Sub<f64> for Vec2 {
 
 impl fmt::Display for Vec2 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
+        write!(f, "Vec2({}, {})", self.x, self.y)
     }
 }
 
