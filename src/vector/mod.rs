@@ -2,8 +2,8 @@ use std::{ops, fmt};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Vec2 {
-    x: f64,
-    y: f64,
+    pub x: f64,
+    pub y: f64,
 }
 
 impl Vec2 {
@@ -31,8 +31,7 @@ impl Vec2 {
     }
 
     pub fn dot(&self, rhs: Vec2) -> f64 {
-        // TODO
-        0.
+        (self.x * rhs.x) + (self.y * rhs.y)
     }
 }
 
@@ -106,7 +105,7 @@ impl ops::Sub<f64> for Vec2 {
 
 impl fmt::Display for Vec2 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
+        write!(f, "Vec2({}, {})", self.x, self.y)
     }
 }
 
