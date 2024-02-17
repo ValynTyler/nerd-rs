@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-pub mod mat2;
-pub mod mat3;
-pub mod mat4;
-=======
 use std::{fmt, ops};
 
 use crate::vector::Vec2;
@@ -54,4 +49,3 @@ impl fmt::Display for Mat2x2 {
         )
     }
 }
->>>>>>> b6e070e0cf69a445d6f0f91486b3f488848125a9

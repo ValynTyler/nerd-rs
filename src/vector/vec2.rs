@@ -2,14 +2,14 @@ use std::{ops, fmt};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Vec2 {
-    x: f64,
-    y: f64,
+    pub x: f64,
+    pub y: f64,
 }
 
 impl Vec2 {
-    pub const ONE: Vec2 = Vec2::new(1., 1.);
-    pub const UP: Vec2 = Vec2::new(1., 0.);
-    pub const DOWN: Vec2 = Vec2::new(-1., 0.);
+    pub const ONE:  Vec2 = Vec2::new( 1.0, 1.0);
+    pub const UP:   Vec2 = Vec2::new( 1.0, 0.0);
+    pub const DOWN: Vec2 = Vec2::new(-1.0, 0.0);
 
     pub const fn new(x: f64, y: f64) -> Vec2 {
         Vec2 { x, y }
@@ -33,7 +33,7 @@ impl Vec2 {
     }
 
     pub fn dot(&self, rhs: Vec2) -> f64 {
-        self.x * rhs.x + self.y * rhs.y
+        (self.x * rhs.x) + (self.y * rhs.y)
     }
 }
 
