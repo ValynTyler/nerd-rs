@@ -1,51 +1,37 @@
-use std::{fmt, ops};
+use std::fmt;
 
-use crate::vector::Vec2;
+use crate::vector::Vector3;
 
-pub struct Mat2x2 {
-    elements: [[f64; 2]; 2]
-}
+pub struct Matrix4(pub [f64; 16]);
 
-impl Mat2x2 {
-    pub fn new(values: [[f64; 2]; 2]) -> Mat2x2 {
-        Mat2x2 {
-            elements: values
-        }
+impl Matrix4 {
+    pub fn identity() -> Self {
+        Matrix4([
+            1., 0., 0., 0.,
+            0., 1., 0., 0.,
+            0., 0., 1., 0.,
+            0., 0., 0., 1.,
+        ])
     }
 
-    pub fn get(&self, lin: usize, col: usize) -> f64 {
-        self.elements[lin][col]
-    }
-
-    pub fn set(&mut self, lin: usize, col: usize, value: f64) {
-        self.elements[lin][col] = value;
+    pub fn look_at(_position: Vector3, _forward: Vector3, _up: Vector3) -> Self {
+        Matrix4::identity()
     }
 }
 
-impl ops::Mul<Vec2> for Mat2x2 {
-    type Output = Vec2;
-
-    fn mul(self, rhs: Vec2) -> Self::Output {
-        // rhs.x * col1 + rhs.y * col2
-        Vec2 {
-            x: rhs.x * self.elements[0][0] + rhs.y * self.elements[0][1],
-            y: rhs.x * self.elements[1][0] + rhs.y * self.elements[1][1],
-        }
-    }
-}
-
-impl fmt::Display for Mat2x2 {
+impl fmt::Display for Matrix4 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "
-            [{} {}]
-            [{} {}]
-            ",
-            self.elements[0][0],
-            self.elements[0][1],
-            self.elements[1][0],
-            self.elements[1][1],
-        )
+        for i in 0..4 {
+            write!(
+                f,
+                "[{} {} {} {}]\n",
+                self.0[0 + i*4],
+                self.0[1 + i*4],
+                self.0[2 + i*4],
+                self.0[3 + i*4]
+            )
+            .unwrap();
+        }
+        write!(f, "")
     }
 }
