@@ -1,6 +1,5 @@
 use std::ops;
 
-#[macro_export]
 macro_rules! vector {
     ($x:expr) => ($x);
     ($x:expr, $y:expr) => (Vector2 {

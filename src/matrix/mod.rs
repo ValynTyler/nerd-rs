@@ -31,17 +31,23 @@ impl Mat4 {
 
     pub fn from_translation(translation: Vec3) -> Self {
         let v = translation;
-        Mat4::identity() * Vector4::new(v.x, v.y, v.z, 1.0)
+        // Mat4::identity() * Vector4::new(v.x, v.y, v.z, 1.0)
+        Mat4([
+            1.0, 0.0, 0.0, v.x,
+            0.0, 2.0, 0.0, v.y,
+            0.0, 0.0, 1.0, v.z,
+            0.0, 0.0, 0.0, 1.0,
+        ])
     }
 }
 
-impl ops::Mul<Vector4> for Mat4 {
-    type Output = Mat4;
+// impl ops::Mul<Vector4> for Mat4 {
+//     type Output = Vector4;
 
-    fn mul(self, rhs: Vector4) -> Self::Output {
+//     fn mul(self, rhs: Vector4) -> Self::Output {
         
-    }
-}
+//     }
+// }
 
 impl fmt::Display for Mat4 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
