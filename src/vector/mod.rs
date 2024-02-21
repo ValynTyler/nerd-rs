@@ -1,15 +1,13 @@
-pub mod vec2;
 use std::ops;
 
-pub use vec2::Vec2;
-
+#[macro_export]
 macro_rules! vector {
     ($x:expr) => ($x);
     ($x:expr, $y:expr) => (Vector2 {
         x: $x,
         y: $y,
     });
-    ($x:expr, $y:expr, $z:expr) => (Vector3 {
+    ($x:expr, $y:expr, $z:expr) => (Vec3 {
         x: $x,
         y: $y,
         z: $z,
@@ -32,54 +30,68 @@ macro_rules! square_magnitude {
 }
 
 pub trait Vector {
-    fn len(&self) -> f64;
+    fn len(&self) -> f32;
 }
 
 #[derive(Debug)]
 pub struct Vector2 {
-    pub x: f64,
-    pub y: f64,
+    pub x: f32,
+    pub y: f32,
 }
 
 impl Vector2 {
-    pub fn new(x: f64, y: f64) -> Vector2 {
+    pub fn new(x: f32, y: f32) -> Vector2 {
         vector!(x, y)
     }
 }
 
 impl Vector for Vector2 {
-    fn len(&self) -> f64 {
-        f64::sqrt(square_magnitude!(self.x, self.y))
+    fn len(&self) -> f32 {
+        f32::sqrt(square_magnitude!(self.x, self.y))
     }
 }
 
 #[derive(Debug, Copy, Clone)]
-pub struct Vector3 {
-    pub x: f64,
-    pub y: f64,
-    pub z: f64,
+pub struct Vec3 {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
 }
 
-impl Vector3 {
-    pub fn new(x: f64, y: f64, z: f64) -> Vector3 {
+impl Vec3 {
+    pub fn new(x: f32, y: f32, z: f32) -> Vec3 {
         vector!(x, y, z)
     }
 }
 
-impl Vector for Vector3 {
-    fn len(&self) -> f64 {
-        f64::sqrt(square_magnitude!(self.x, self.y, self.z))
+impl Vector for Vec3 {
+    fn len(&self) -> f32 {
+        f32::sqrt(square_magnitude!(self.x, self.y, self.z))
     }
 }
 
-impl ops::Add for Vector3 {
-    type Output = Vector3;
+impl ops::Add for Vec3 {
+    type Output = Vec3;
 
     fn add(self, rhs: Self) -> Self::Output {
-        Vector3::new(
+        Vec3::new(
             self.x + rhs.x,
             self.y + rhs.y,
             self.z + rhs.z,
         )
+    }
+}
+
+#[derive(Debug)]
+pub struct Vector4 {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
+    pub w: f32,
+}
+
+impl Vector4 {
+    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Vector4 {
+        vector!(x, y, z, w)
     }
 }
