@@ -1,4 +1,4 @@
-use nerd::{matrix::{Mat4, Matrix}, vector::{Vec3, Vector, Vector4}};
+use nerd::{matrix::{Matrix4, Matrix}, vector::{Vector3, Vector, Vector4}};
 
 extern crate nerd;
 
@@ -6,10 +6,8 @@ pub const PI: f64 = 3.14159265358979323846264338327950288_f64; // 3.141592653589
 
 fn main() {
 
-    let v = Vec3::new(1., 0., 0.);
-    let w = Vec3::new(0., 1., 0.);
+    let v = Vector3::new(3., 0., 0.);
+    let w = Vector4::new(-1., 1., 0., 0.);
 
-    println!("{:?}", v);
-    println!("{:?}", w);
-    println!("{:?}", w.cross(v));
+    println!("{:?}", Matrix4::look_at(Vector3::ZERO, v, Vector3::UP) * w);
 }

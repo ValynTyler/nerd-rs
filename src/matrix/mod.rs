@@ -1,18 +1,77 @@
 use std::{fmt, ops};
 
-use crate::vector::{Vec3, Vector, Vector4};
+use crate::vector::{Vector3, Vector, Vector4};
 
 pub trait Matrix {
     fn identity() -> Self;
     fn flip(self) -> Self;
+    fn get(&self, i: usize, j: usize) -> f32;
     fn as_ptr(&self) -> *const f32;
 }
 
-pub struct Mat4(pub [f32; 16]);
+pub struct Matrix3(pub [f32; 9]);
 
-impl Matrix for Mat4 {
+impl Matrix3 {
+    pub fn rotation_x(rotation: f32) -> Self {
+        let theta = rotation;
+        Self([
+            1.0, 0.0,              0.0,
+            0.0, f32::cos(theta), -f32::sin(theta),
+            0.0, f32::sin(theta),  f32::cos(theta),
+        ])
+    }
+
+    pub fn rotation_y(rotation: f32) -> Self {
+        let theta = rotation;
+        Self([
+             f32::cos(theta), 0.0, f32::sin(theta),
+             0.0,             1.0, 0.0,            
+            -f32::sin(theta), 0.0, f32::cos(theta),
+        ])
+    }
+}
+
+impl Matrix for Matrix3 {
     fn identity() -> Self {
-        Mat4([
+        todo!()
+    }
+
+    fn flip(self) -> Self {
+        todo!()
+    }
+
+    fn get(&self, i: usize, j: usize) -> f32 {
+        self.0[(i-1) * 3 + (j-1)]
+    }
+
+    fn as_ptr(&self) -> *const f32 {
+        todo!()
+    }
+}
+
+impl ops::Mul<Vector3> for Matrix3 {
+    type Output = Vector3;
+
+    fn mul(self, rhs: Vector3) -> Self::Output {
+        let mut vec = Vector3::ZERO;
+
+        for i in 1..4 {
+            let mut sum: f32 = 0.0;
+            for k in 1..4 {
+                sum += self.get(i, k) * rhs.get(k);  // TODO: Turn into a MACRO
+            }
+            vec.set(i, sum);
+        }
+
+        vec
+    }
+}
+
+pub struct Matrix4(pub [f32; 16]);
+
+impl Matrix for Matrix4 {
+    fn identity() -> Self {
+        Matrix4([
             1., 0., 0., 0.,
             0., 1., 0., 0.,
             0., 0., 1., 0.,
@@ -21,7 +80,7 @@ impl Matrix for Mat4 {
     }
 
     fn flip(self) -> Self {
-        Mat4([
+        Matrix4([
             self.get(1, 1), self.get(2, 1), self.get(3, 1), self.get(4, 1),
             self.get(1, 2), self.get(2, 2), self.get(3, 2), self.get(4, 2),
             self.get(1, 3), self.get(2, 3), self.get(3, 3), self.get(4, 3),
@@ -29,28 +88,29 @@ impl Matrix for Mat4 {
         ])
     }
 
+    fn get(&self, i: usize, j: usize) -> f32 {
+        self.0[(i-1) * 4 + (j-1)]
+    }
+
+
     fn as_ptr(&self) -> *const f32 {
         &self.0[0]
     } 
 }
 
-impl Mat4 {
-    pub fn get(&self, i: usize, j: usize) -> f32 {
-        self.0[(i-1) * 4 + (j-1)]
-    }
-
+impl Matrix4 {
     pub fn set(&mut self, i: usize, j: usize, value: f32) {
         self.0[(i-1) * 4 + (j-1)] = value;
     }
 
-    pub fn look_at(position: Vec3, forward: Vec3, up: Vec3) -> Self {
+    pub fn look_at(position: Vector3, forward: Vector3, up: Vector3) -> Self {
         let right = forward.cross(up).normalize();
-        Mat4([
+        Matrix4([
             right.x,   right.y,   right.z,   0.,
             up.x,      up.y,      up.z,      0.,
             forward.x, forward.y, forward.z, 0.,
             0.,        0.,        0.,        1.,
-        ]) * Mat4::from_translation(-position)
+        ]) * Matrix4::from_translation(-position)
         
         // Mat4([
         //     right.x, up.x, forward.x, 0.0,
@@ -60,19 +120,19 @@ impl Mat4 {
         // ])
     }
 
-    pub fn from_translation(translation: Vec3) -> Self {
+    pub fn from_translation(translation: Vector3) -> Self {
         let v = translation;
-        Mat4([
+        Matrix4([
             1.0, 0.0, 0.0, v.x,
             0.0, 1.0, 0.0, v.y,
             0.0, 0.0, 1.0, v.z,
-            0.0, 0.0, 0.0, 1.0,
+            0.0, 0.0, 0.0,  1.0,
         ])
     }
 
-    pub fn rotation_x(rotation: f32) -> Mat4 {
+    pub fn rotation_x(rotation: f32) -> Self {
         let theta = rotation;
-        Mat4([
+        Matrix4([
             1.0, 0.0,              0.0,             0.0,
             0.0, f32::cos(theta), -f32::sin(theta), 0.0,
             0.0, f32::sin(theta),  f32::cos(theta), 0.0,
@@ -80,9 +140,9 @@ impl Mat4 {
         ])
     }
 
-    pub fn rotation_y(rotation: f32) -> Mat4 {
+    pub fn rotation_y(rotation: f32) -> Self {
         let theta = rotation;
-        Mat4([
+        Matrix4([
              f32::cos(theta), 0.0, f32::sin(theta), 0.0,
              0.0,             1.0, 0.0,             0.0,
             -f32::sin(theta), 0.0, f32::cos(theta), 0.0,
@@ -91,7 +151,7 @@ impl Mat4 {
     }
 }
 
-impl ops::Mul<Vector4> for Mat4 {
+impl ops::Mul<Vector4> for Matrix4 {
     type Output = Vector4;
 
     fn mul(self, rhs: Vector4) -> Self::Output {
@@ -104,11 +164,11 @@ impl ops::Mul<Vector4> for Mat4 {
     }
 }
 
-impl ops::Mul<Mat4> for Mat4 {
-    type Output = Mat4;
+impl ops::Mul<Matrix4> for Matrix4 {
+    type Output = Matrix4;
 
-    fn mul(self, rhs: Mat4) -> Self::Output {
-        let mut mat = Mat4::identity();
+    fn mul(self, rhs: Matrix4) -> Self::Output {
+        let mut mat = Matrix4::identity();
 
         for i in 1..5 {
             for j in 1..5 {
@@ -124,7 +184,7 @@ impl ops::Mul<Mat4> for Mat4 {
     }
 }
 
-impl fmt::Display for Mat4 {
+impl fmt::Display for Matrix4 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         for i in 0..4 {
             write!(

@@ -6,7 +6,7 @@ macro_rules! vector {
         x: $x,
         y: $y,
     });
-    ($x:expr, $y:expr, $z:expr) => (Vec3 {
+    ($x:expr, $y:expr, $z:expr) => (Vector3 {
         x: $x,
         y: $y,
         z: $z,
@@ -40,7 +40,9 @@ pub struct Vector2 {
 }
 
 impl Vector2 {
-    pub fn new(x: f32, y: f32) -> Vector2 {
+    pub const ZERO: Vector2 = Vector2::new(0.0, 0.0);
+
+    pub const fn new(x: f32, y: f32) -> Vector2 {
         vector!(x, y)
     }
 }
@@ -59,27 +61,50 @@ impl Vector for Vector2 {
 }
 
 #[derive(Debug, Copy, Clone)]
-pub struct Vec3 {
+pub struct Vector3 {
     pub x: f32,
     pub y: f32,
     pub z: f32,
 }
 
-impl Vec3 {
-    pub fn new(x: f32, y: f32, z: f32) -> Vec3 {
+impl Vector3 {
+    pub const ZERO: Vector3    = Vector3::new(0., 0., 0.,);
+    pub const FORWARD: Vector3 = Vector3::new(0., 0., 1.,);
+    pub const RIGHT: Vector3   = Vector3::new(1., 0., 0.,);
+    pub const UP: Vector3      = Vector3::new(0., 1., 0.,);
+
+    pub const fn new(x: f32, y: f32, z: f32) -> Vector3 {
         vector!(x, y, z)
     }
 
-    pub fn cross(&self, rhs: Vec3) -> Vec3 {
-        Vec3::new(
+    pub fn cross(&self, rhs: Vector3) -> Vector3 {
+        Vector3::new(
             self.y * rhs.z - self.z * rhs.y,
             self.z * rhs.x - self.x * rhs.z,
             self.x * rhs.y - self.y * rhs.x,
         )
     }
+
+    pub fn get(&self, i: usize) -> f32 {
+        match i {
+            1 => self.x,
+            2 => self.y,
+            3 => self.z,
+            _ => panic!(),
+        }
+    }
+
+    pub fn set(&mut self, i: usize, value: f32) {
+        match i {
+            1 => self.x = value,
+            2 => self.y = value,
+            3 => self.z = value,
+            _ => panic!(),
+        }
+    }
 }
 
-impl Vector for Vec3 {
+impl Vector for Vector3 {
     fn len(&self) -> f32 {
         f32::sqrt(square_magnitude!(self.x, self.y, self.z))
     }
@@ -93,11 +118,11 @@ impl Vector for Vec3 {
     }
 }
 
-impl ops::Add for Vec3 {
-    type Output = Vec3;
+impl ops::Add for Vector3 {
+    type Output = Vector3;
 
     fn add(self, rhs: Self) -> Self::Output {
-        Vec3::new(
+        Vector3::new(
             self.x + rhs.x,
             self.y + rhs.y,
             self.z + rhs.z,
@@ -105,17 +130,17 @@ impl ops::Add for Vec3 {
     }
 }
 
-impl ops::AddAssign for Vec3 {
+impl ops::AddAssign for Vector3 {
     fn add_assign(&mut self, rhs: Self) {
         *self = *self + rhs
     }
 }
 
-impl ops::Mul<f32> for Vec3 {
-    type Output = Vec3;
+impl ops::Mul<f32> for Vector3 {
+    type Output = Vector3;
 
     fn mul(self, rhs: f32) -> Self::Output {
-        Vec3::new(
+        Vector3::new(
             self.x * rhs,
             self.y * rhs,
             self.z * rhs,
@@ -123,11 +148,11 @@ impl ops::Mul<f32> for Vec3 {
     }
 }
 
-impl ops::Neg for Vec3 {
-    type Output = Vec3;
+impl ops::Neg for Vector3 {
+    type Output = Vector3;
 
     fn neg(self) -> Self::Output {
-        Vec3::new(
+        Vector3::new(
             -self.x,
             -self.y,
             -self.z,
