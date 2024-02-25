@@ -1,3 +1,4 @@
+use core::fmt;
 use std::ops;
 
 macro_rules! vector {
@@ -77,7 +78,7 @@ impl Vector3 {
         vector!(x, y, z)
     }
 
-    pub fn cross(&self, rhs: Vector3) -> Vector3 {
+    pub fn cross(self, rhs: Vector3) -> Vector3 {
         Vector3::new(
             self.y * rhs.z - self.z * rhs.y,
             self.z * rhs.x - self.x * rhs.z,
@@ -130,6 +131,18 @@ impl ops::Add for Vector3 {
     }
 }
 
+impl ops::Sub for Vector3 {
+    type Output = Vector3;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Vector3::new(
+            self.x - rhs.x,
+            self.y - rhs.y,
+            self.z - rhs.z,
+        )
+    }
+}
+
 impl ops::AddAssign for Vector3 {
     fn add_assign(&mut self, rhs: Self) {
         *self = *self + rhs
@@ -157,6 +170,12 @@ impl ops::Neg for Vector3 {
             -self.y,
             -self.z,
         )
+    }
+}
+
+impl fmt::Display for Vector3 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 

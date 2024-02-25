@@ -6,6 +6,7 @@ pub trait Matrix {
     fn identity() -> Self;
     fn flip(self) -> Self;
     fn get(&self, i: usize, j: usize) -> f32;
+    fn set(&mut self, i: usize, j: usize, value: f32);
     fn as_ptr(&self) -> *const f32;
 }
 
@@ -47,7 +48,11 @@ impl Matrix3 {
 
 impl Matrix for Matrix3 {
     fn identity() -> Self {
-        todo!()
+        Matrix3([
+            1., 0., 0.,
+            0., 1., 0.,
+            0., 0., 1.,
+        ])
     }
 
     fn flip(self) -> Self {
@@ -56,6 +61,10 @@ impl Matrix for Matrix3 {
 
     fn get(&self, i: usize, j: usize) -> f32 {
         self.0[(i-1) * 3 + (j-1)]
+    }
+
+    fn set(&mut self, i: usize, j: usize, value: f32) {
+        self.0[(i-1) * 3 + (j-1)] = value;
     }
 
     fn as_ptr(&self) -> *const f32 {
@@ -78,6 +87,42 @@ impl ops::Mul<Vector3> for Matrix3 {
         }
 
         vec
+    }
+}
+
+impl ops::Mul<Matrix3> for Matrix3 {
+    type Output = Matrix3;
+
+    fn mul(self, rhs: Matrix3) -> Self::Output {
+        let mut mat = Matrix3::identity();
+
+        for i in 1..4 {
+            for j in 1..4 {
+                let mut sum: f32 = 0.0;
+                for k in 1..4 {
+                    sum += self.get(i, k) * rhs.get(k, j);  // TODO: Turn into a MACRO
+                }
+                mat.set(i, j, sum);
+            }
+        }
+
+        mat
+    }
+}
+
+impl fmt::Display for Matrix3 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        for i in 0..3 {
+            write!(
+                f,
+                "[{} {} {}]\n",
+                self.0[0 + i*3],
+                self.0[1 + i*3],
+                self.0[2 + i*3],
+            )
+            .unwrap();
+        }
+        write!(f, "")
     }
 }
 
@@ -106,6 +151,9 @@ impl Matrix for Matrix4 {
         self.0[(i-1) * 4 + (j-1)]
     }
 
+    fn set(&mut self, i: usize, j: usize, value: f32) {
+        self.0[(i-1) * 4 + (j-1)] = value;
+    }
 
     fn as_ptr(&self) -> *const f32 {
         &self.0[0]
@@ -113,12 +161,8 @@ impl Matrix for Matrix4 {
 }
 
 impl Matrix4 {
-    pub fn set(&mut self, i: usize, j: usize, value: f32) {
-        self.0[(i-1) * 4 + (j-1)] = value;
-    }
-
     pub fn look_at(position: Vector3, forward: Vector3, up: Vector3) -> Self {
-        let right = forward.cross(up).normalize();
+        let right = Vector3::cross(forward, up).normalize();
         Matrix4([
             right.x,   right.y,   right.z,   0.,
             up.x,      up.y,      up.z,      0.,
