@@ -86,6 +86,10 @@ impl Vector3 {
         )
     }
 
+    pub fn dot(self, rhs: Vector3) -> f32 {
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
+    }
+
     pub fn get(&self, i: usize) -> f32 {
         match i {
             1 => self.x,

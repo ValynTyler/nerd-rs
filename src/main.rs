@@ -9,5 +9,5 @@ fn main() {
     let v = Vector3::new(3., 0., 0.);
     let w = Vector4::new(-1., 1., 0., 0.);
 
-    println!("{:?}", Matrix4::look_at(Vector3::ZERO, v, Vector3::UP) * w);
+    println!("{:?}", Matrix4::look_at_dir(Vector3::ZERO, v, Vector3::UP) * w);
 }

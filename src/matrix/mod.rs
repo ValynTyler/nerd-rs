@@ -161,21 +161,18 @@ impl Matrix for Matrix4 {
 }
 
 impl Matrix4 {
-    pub fn look_at(position: Vector3, forward: Vector3, up: Vector3) -> Self {
-        let right = Vector3::cross(forward, up).normalize();
+    pub fn look_at_dir(position: Vector3, forward: Vector3, up: Vector3) -> Self {
+        let mut f = forward;
+        let f = f.normalize();
+        let r = f.cross(up).normalize();
+        let u = r.cross(f);
+
         Matrix4([
-            right.x,   right.y,   right.z,   0.,
-            up.x,      up.y,      up.z,      0.,
-            forward.x, forward.y, forward.z, 0.,
-            0.,        0.,        0.,        1.,
-        ]) * Matrix4::from_translation(-position)
-        
-        // Mat4([
-        //     right.x, up.x, forward.x, 0.0,
-        //     right.y, up.y, forward.y, 0.0,
-        //     right.z, up.z, forward.z, 0.0,
-        //     0.0,     0.0,  0.0,       1.0,
-        // ])
+            r.x.clone(), u.x.clone(), -f.x.clone(), 0.0,
+            r.y.clone(), u.y.clone(), -f.y.clone(), 0.0,
+            r.z.clone(), u.z.clone(), -f.z.clone(), 0.0,
+            -position.dot(r), -position.dot(u), position.dot(f), 1.0,
+        ])
     }
 
     pub fn from_translation(translation: Vector3) -> Self {
