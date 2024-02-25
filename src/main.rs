@@ -1,4 +1,4 @@
-use nerd::{matrix::{Matrix4, Matrix}, vector::{Vector3, Vector, Vector4}};
+use nerd::{matrix::Matrix4, vector::{Vector3, Vector4}};
 
 extern crate nerd;
 

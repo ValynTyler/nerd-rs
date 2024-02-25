@@ -29,6 +29,20 @@ impl Matrix3 {
             -f32::sin(theta), 0.0, f32::cos(theta),
         ])
     }
+
+    pub fn rotation_axis(axis: Vector3, angle: f32) -> Self {
+        let r = axis;
+        let theta = angle;
+        
+        let sin = theta.sin();
+        let cos = theta.cos();
+
+        Matrix3([
+            cos + r.x*r.x*(1.0 - cos),        r.x*r.y*(1.0 - cos) - r.z*sin,     r.x*r.z*(1.0 - cos) + r.y*sin,
+            r.y*r.x*(1.0 - cos) + r.z*sin,    cos + r.y*r.y*(1.0 - cos),         r.y*r.z*(1.0 - cos) - r.x*sin,
+            r.z*r.x*(1.0 - cos) - r.y*sin,    r.z*r.y*(1.0 - cos) + r.x*sin,    cos + r.z*r.z*(1.0 - cos),
+        ])
+    }
 }
 
 impl Matrix for Matrix3 {
