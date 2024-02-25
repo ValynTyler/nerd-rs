@@ -54,6 +54,10 @@ impl Vector for Vector2 {
     }
 
     fn normalize(&mut self) -> Self {
+        if self.len() == 0.0 {
+            return *self;
+        }
+
         let f = 1.0 / self.len();
         self.x = self.x * f;
         self.y = self.y * f;    // TODO: MACRO
