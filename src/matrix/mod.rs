@@ -163,6 +163,22 @@ impl Matrix4 {
              0.0,             0.0, 0.0,             1.0,
         ])
     }
+
+    pub fn rotation_axis(axis: Vector3, angle: f32) -> Self {
+        let mut r = axis;
+        let r = r.normalize();
+        let theta = angle;
+        
+        let sin = theta.sin();
+        let cos = theta.cos();
+
+        Matrix4([
+            cos + r.x*r.x*(1.0 - cos),        r.x*r.y*(1.0 - cos) - r.z*sin,     r.x*r.z*(1.0 - cos) + r.y*sin, 0.0,
+            r.y*r.x*(1.0 - cos) + r.z*sin,    cos + r.y*r.y*(1.0 - cos),         r.y*r.z*(1.0 - cos) - r.x*sin, 0.0,
+            r.z*r.x*(1.0 - cos) - r.y*sin,    r.z*r.y*(1.0 - cos) + r.x*sin,    cos + r.z*r.z*(1.0 - cos),      0.0,
+            0.0, 0.0, 0.0, 1.0,
+        ])
+    }
 }
 
 impl ops::Mul<Vector4> for Matrix4 {
