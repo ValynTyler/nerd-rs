@@ -176,7 +176,7 @@ impl Matrix4 {
             r.y.clone(), u.y.clone(), -f.y.clone(), 0.0,
             r.z.clone(), u.z.clone(), -f.z.clone(), 0.0,
             -eye.dot(r), -eye.dot(u), eye.dot(f), 1.0,
-        ])
+        ]).flip()
     }
 
     pub fn from_translation(translation: Vector3) -> Self {
