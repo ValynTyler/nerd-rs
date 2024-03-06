@@ -161,8 +161,12 @@ impl Matrix for Matrix4 {
 }
 
 impl Matrix4 {
-    pub fn look_at_dir(position: Vector3, forward: Vector3, up: Vector3) -> Self {
-        let mut f = forward;
+    pub fn look_at(eye: Vector3, center: Vector3, up: Vector3) -> Matrix4 {
+        Matrix4::look_at_dir(eye, center - eye, up)
+    }
+
+    pub fn look_at_dir(eye: Vector3, dir: Vector3, up: Vector3) -> Self {
+        let mut f = dir;
         let f = f.normalize();
         let r = f.cross(up).normalize();
         let u = r.cross(f);
@@ -171,7 +175,7 @@ impl Matrix4 {
             r.x.clone(), u.x.clone(), -f.x.clone(), 0.0,
             r.y.clone(), u.y.clone(), -f.y.clone(), 0.0,
             r.z.clone(), u.z.clone(), -f.z.clone(), 0.0,
-            -position.dot(r), -position.dot(u), position.dot(f), 1.0,
+            -eye.dot(r), -eye.dot(u), eye.dot(f), 1.0,
         ])
     }
 
