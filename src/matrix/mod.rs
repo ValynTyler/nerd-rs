@@ -238,7 +238,7 @@ impl Matrix4 {
             0.,               2./(top-bottom),  0.,              -(top+bottom) / (top-bottom),
             0.,               0.,               2./(far-near),   -(far+near)   / (far-near),
             0.,               0.,               0.,               1.,
-        ])
+        ]).flip()
     }
 }
 
