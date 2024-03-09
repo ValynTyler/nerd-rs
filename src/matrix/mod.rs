@@ -189,6 +189,16 @@ impl Matrix4 {
         ])
     }
 
+    pub fn uniform_scale(scale: f32) -> Self {
+        let scl = scale;
+        Matrix4([
+            scl, 0.0, 0.0, 0.0,
+            0.0, scl, 0.0, 0.0,
+            0.0, 0.0, scl, 0.0,
+            0.0, 0.0, 0.0, 1.0,
+        ])
+    }
+
     pub fn rotation_x(rotation: f32) -> Self {
         let theta = rotation;
         Matrix4([
