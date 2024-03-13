@@ -199,6 +199,16 @@ impl Matrix4 {
         ])
     }
 
+    pub fn scale(scale: Vector3) -> Self {
+        let s = scale;
+        Matrix4([
+            s.x, 0.0, 0.0, 0.0,
+            0.0, s.y, 0.0, 0.0,
+            0.0, 0.0, s.z, 0.0,
+            0.0, 0.0, 0.0, 1.0,
+        ])
+    }
+
     pub fn rotation_x(rotation: f32) -> Self {
         let theta = rotation;
         Matrix4([
