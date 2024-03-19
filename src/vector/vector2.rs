@@ -1,3 +1,5 @@
+use std::ops;
+
 use super::square_magnitude;
 use super::vector;
 
@@ -31,5 +33,16 @@ impl Vector for Vector2 {
         self.x = self.x * f;
         self.y = self.y * f;    // TODO: MACRO
         *self
+    }
+}
+
+impl ops::Add for Vector2 {
+    type Output = Vector2;
+    
+    fn add(self, rhs: Self) -> Self::Output {
+        Vector2 {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
     }
 }
