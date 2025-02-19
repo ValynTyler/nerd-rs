@@ -1,5 +1,6 @@
 use super::Vector;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Vector3<T> {
     pub x: T,
     pub y: T,
