@@ -16,3 +16,12 @@ fn test_vector_norm() {
 
     assert_eq!(v.norm(), 1.);
 }
+
+#[test]
+fn test_vector_unit() {
+    let v = Vector2::<f32>::new(1., 1.);
+    let w = v.unit();
+
+    assert_eq!(v.x, w.x);
+    assert_eq!(v.y, w.y);
+}
